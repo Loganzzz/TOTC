@@ -71,34 +71,34 @@ class MainWindow:
         #tabcontrol
         tabcontrol = ttk.Notebook(self.frame)
         tab1 = ttk.Frame(tabcontrol, width = 250, height = 360)
-        tabcontrol.add(tab1, text="模型训练")
+        tabcontrol.add(tab1, text="Model")
         tab2 = ttk.Frame(tabcontrol, width = 250, height = 360)
-        tabcontrol.add(tab2, text="TOC预测")
+        tabcontrol.add(tab2, text="Predict")
         tab3 = ttk.Frame(tabcontrol, width = 250, height = 360)
-        tabcontrol.add(tab3, text="ΔlogR法预测")
+        tabcontrol.add(tab3, text="ΔlogR plus")
         tabcontrol.grid(row=0, column=0)
         #选项卡一中分三部分
-        trainframe = ttk.Labelframe(tab1, text="选择训练数据")
+        trainframe = ttk.Labelframe(tab1, text="file")
         trainframe.grid(row=0, column = 0, padx = 1, pady = 2)
-        dataframe = ttk.Labelframe(tab1, text="数据")
+        dataframe = ttk.Labelframe(tab1, text="data")
         dataframe.grid(row=1, column = 0, padx = 1, pady = 2)
-        errorframe = ttk.Labelframe(tab1, text="训练模型")
+        errorframe = ttk.Labelframe(tab1, text="train")
         errorframe.grid(row=3, column = 0, padx = 1, pady = 2)
 
         #选项卡二中分三部分
-        predictframe = ttk.Labelframe(tab2, text="选择测井数据")
+        predictframe = ttk.Labelframe(tab2, text="file")
         predictframe.grid(row=0, column = 0, padx = 1, pady = 2)
-        modelframe = ttk.Labelframe(tab2, text="模型")
+        modelframe = ttk.Labelframe(tab2, text="model")
         modelframe.grid(row=1, column = 0, padx = 1, pady = 2)
-        fittingframe = ttk.Labelframe(tab2, text="拟合")
+        fittingframe = ttk.Labelframe(tab2, text="predict")
         fittingframe.grid(row=4, column = 0, padx = 1, pady = 2)
 
         #选项卡三中分三部分
-        logframe = ttk.Labelframe(tab3, text="选择测井数据")
+        logframe = ttk.Labelframe(tab3, text="file")
         logframe.grid(row=0, column = 0, padx = 1, pady = 2)
-        baseframe = ttk.Labelframe(tab3, text="基线(可不填，程序自动识别)")
+        baseframe = ttk.Labelframe(tab3, text="baseline(not necessary，auto-choose)")
         baseframe.grid(row=1, column = 0, padx = 1, pady = 2)
-        calframe = ttk.Labelframe(tab3, text="计算")
+        calframe = ttk.Labelframe(tab3, text="predict")
         calframe.grid(row=4, column = 0, padx = 1, pady = 2)
 
 
@@ -120,7 +120,7 @@ class MainWindow:
         ysb.grid(row = 0,column = 2)
 
         #选项卡一中选择文件
-        label1 = ttk.Label(trainframe,text = "测井数据：")
+        label1 = ttk.Label(trainframe,text = "LOG file：")
         label1.grid(row = 1, column = 1, padx = 2)
         log_path = StringVar()
         log_entry = Entry(trainframe,textvariable = log_path)
@@ -134,11 +134,11 @@ class MainWindow:
                     showdata.insert("","end",tuple(data[i,:]))
                 showdata.update()
                 log_path.set(filename)
-        button_open = ttk.Button(trainframe,text = "打开文件")
+        button_open = ttk.Button(trainframe,text = "open")
         button_open.grid(row = 1,column = 3, padx = 4)  
         button_open.bind("<ButtonRelease-1>",buttonListener_fileopen)
 
-        label_toc = ttk.Label(trainframe,text = "toc数据：")
+        label_toc = ttk.Label(trainframe,text = "TOC file：")
         label_toc.grid(row = 2, column = 1, padx = 2)
         toc_path = StringVar()
         toc_entry = Entry(trainframe, textvariable = toc_path)
@@ -146,7 +146,7 @@ class MainWindow:
         def buttonListener_tocopen(event):
             filename = tkinter.filedialog.askopenfilename()
             toc_path.set(filename)
-        button_tocopen = ttk.Button(trainframe,text = "打开文件")
+        button_tocopen = ttk.Button(trainframe,text = "open")
         button_tocopen.grid(row = 2,column = 3, padx = 4)  
         button_tocopen.bind("<ButtonRelease-1>",buttonListener_tocopen)
 
@@ -220,7 +220,7 @@ class MainWindow:
 
  		#选项卡一中复选键
         tab1_check_es_name = StringVar()
-        tab1_check_es_name.set("误差累计曲线")
+        tab1_check_es_name.set("accumulate error")
         tab1_check_es = StringVar()
         tab1_checkbutton_es = ttk.Checkbutton(errorframe, variable = tab1_check_es, textvariable = tab1_check_es_name)
         tab1_checkbutton_es.grid(row = 0,column = 0,pady = 2)
@@ -232,7 +232,7 @@ class MainWindow:
         tab1_checkbutton_pr.grid(row = 0,column = 1,pady = 2)
 
         tab1_check_line_name = StringVar()
-        tab1_check_line_name.set("predict-line")
+        tab1_check_line_name.set("result curve")
         tab1_check_line = StringVar()
         tab1_checkbutton_line = ttk.Checkbutton(errorframe, variable = tab1_check_line, textvariable = tab1_check_line_name)
         tab1_checkbutton_line.grid(row = 0,column = 2,pady = 2)
@@ -246,12 +246,12 @@ class MainWindow:
             if toc_path.get() != "":
                 self.tocdata_train = load(toc_path.get())
             else:
-                tkinter.messagebox.showinfo("messagebox","请输入TOC数据文件")
+                tkinter.messagebox.showinfo("messagebox","Need TOC file!")
                 return 
             if log_path.get() != "":
                 self.logdata_train = load(log_path.get())
             else:
-                tkinter.messagebox.showinfo("messagebox","请输入测井数据文件")
+                tkinter.messagebox.showinfo("messagebox","Need log file!")
                 return 
             
             #检查要画的曲线
@@ -293,20 +293,20 @@ class MainWindow:
                 tab1_check_list_log.append(8)
                 loglist.append("SP")
             if len(tab1_check_list_log) == 0:
-                tkinter.messagebox.showinfo("messagebox","测井曲线不能为空")
+                tkinter.messagebox.showinfo("messagebox","Check LOG curve you choose!")
             else: 
-                tkinter.messagebox.showinfo("messagebox","训练需要1-3min，请耐心等待,放松一下http://www.4399.com/flash/7361.htm#search3\nhttp://www.u77.com/game/6015")
+                tkinter.messagebox.showinfo("messagebox","Training  a model needs 3-5min，relax http://www.4399.com/flash/7361.htm#search3\nhttp://www.u77.com/game/6015")
                 process(self.logdata_train,self.tocdata_train,tab1_check_list_log,plot_pr,plot_es,plot_line,loglist)
-                tkinter.messagebox.showinfo("messagebox","完成")
+                tkinter.messagebox.showinfo("messagebox","Success!")
                 
-        button_open = ttk.Button(errorframe,text = "绘制曲线")
+        button_open = ttk.Button(errorframe,text = "train model")
         button_open.grid(row = 1,column = 1, padx = 4,pady = 2)  
         button_open.bind("<ButtonRelease-1>",buttonListener_plot_error)
 
         #选项卡二
 
         #选项卡二中选择文件
-        label_logopen = ttk.Label(predictframe,text = "测井数据：")
+        label_logopen = ttk.Label(predictframe,text = "LOG file：")
         label_logopen.grid(row = 1, column = 1, padx = 2)
         log_path_pre = StringVar()
         log_entry_pre = ttk.Entry(predictframe,textvariable = log_path_pre)
@@ -314,12 +314,12 @@ class MainWindow:
         def buttonListener_logopen(event):
             filename = tkinter.filedialog.askopenfilename()
             log_path_pre.set(filename)
-        button_logopen = ttk.Button(predictframe,text = "打开文件")
+        button_logopen = ttk.Button(predictframe,text = "open")
         button_logopen.grid(row = 1,column = 3, padx = 4)  
         button_logopen.bind("<ButtonRelease-1>",buttonListener_logopen)
         
          #选项卡二选择测井曲线
-        label_log_select = ttk.Labelframe(tab2, text = "使用的测井曲线")
+        label_log_select = ttk.Labelframe(tab2, text = "LOG curve using")
         label_log_select.grid(row = 2,column = 0)
         tab2_check2_name = StringVar()
         tab2_check2_name.set("AC")
@@ -371,7 +371,7 @@ class MainWindow:
 
 
         #选项卡二选择模型
-        label_model_select = ttk.Label(modelframe,text = "选择模型：")
+        label_model_select = ttk.Label(modelframe,text = "choose model：")
         label_model_select.grid(row = 2, column = 1, padx = 2)
 
         v = StringVar(modelframe)
@@ -436,7 +436,7 @@ class MainWindow:
 
         #选项卡二 复选键
         check1_name = StringVar()
-        check1_name.set("绘制曲线")
+        check1_name.set("plot result curve")
         check1 = StringVar()
         checkbutton1 = ttk.Checkbutton(fittingframe, variable = check1, textvariable = check1_name)
         checkbutton1.grid(row = 1,column = 2)
@@ -447,17 +447,17 @@ class MainWindow:
             log_array = []
             
             if log_path_pre.get() == "": #没有测井文件
-                tkinter.messagebox.showinfo("提示","请输入测井文件")
+                tkinter.messagebox.showinfo("NOTICE","Need LOG file")
             else:
                 if not os.path.exists("mmap.json"):
-                    tkinter.messagebox.showinfo("警告","缺少模型映射文件mmap.json")
+                    tkinter.messagebox.showinfo("ERROR","Need mapping file(mmap.json)")
                 else:
                     currentmodel = v.get()
                     #关联测井曲线
                     f = open("mmap.json")
                     mmap = json.load(f)
                     if currentmodel not in mmap.keys(): #映射文件中没有当前模型
-                        tkinter.messagebox.showinfo("警告","当前模型不可用")
+                        tkinter.messagebox.showinfo("ERROR","Model is not avilable!")
                     else:
                         filename = tkinter.filedialog.asksaveasfilename(filetypes=(("Text","*.txt"),("All files","*.*")))
                         if not filename == "":        #取消了
@@ -485,14 +485,14 @@ class MainWindow:
                                 plot_pre = 1
                                 
                             predict("model/" +currentmodel, log_data_pre, log_array, plot_pre, filename+".txt")
-                            tkinter.messagebox.showinfo("提示","预测完成")
+                            tkinter.messagebox.showinfo("NOTICE","Success!")
                             
-        button_fit = ttk.Button(fittingframe,text = "拟合")
+        button_fit = ttk.Button(fittingframe,text = "predict")
         button_fit.grid(row = 3,column = 2, padx = 4)  
         button_fit.bind("<ButtonRelease-1>",buttonListener_fit)
         
         #选项卡三中选择文件
-        label_dlog = ttk.Label(logframe,text = "测井数据：")
+        label_dlog = ttk.Label(logframe,text = "LOG file：")
         label_dlog.grid(row = 1, column = 1, padx = 2)
         dlog_path = StringVar()
         dlog_entry = Entry(logframe,textvariable = dlog_path)
@@ -500,12 +500,12 @@ class MainWindow:
         def buttonListener_dlogopen(event):
             filename = tkinter.filedialog.askopenfilename()
             dlog_path.set(filename)
-        button_dlog = ttk.Button(logframe,text = "打开文件")
+        button_dlog = ttk.Button(logframe,text = "open")
         button_dlog.grid(row = 1,column = 3, padx = 4)  
         button_dlog.bind("<ButtonRelease-1>",buttonListener_dlogopen)
         
         #选项卡三中选择基线
-        label_abase = ttk.Label(baseframe,text = "声波时差基线：")
+        label_abase = ttk.Label(baseframe,text = "AC baseline：")
         label_abase.grid(row = 1, column = 1, padx = 2)
         abase = StringVar()
         abase_entry = Entry(baseframe,textvariable = abase)
@@ -513,7 +513,7 @@ class MainWindow:
         label_abase_unit = ttk.Label(baseframe,text = "(μs/ft)")
         label_abase_unit.grid(row = 1, column = 3, padx = 2)
         
-        label_rbase = ttk.Label(baseframe,text = "电阻率基线：")
+        label_rbase = ttk.Label(baseframe,text = "RT baseline：")
         label_rbase.grid(row = 2, column = 1, padx = 2)
         rbase = StringVar()
         rbase_entry = Entry(baseframe,textvariable = rbase)
@@ -521,7 +521,7 @@ class MainWindow:
         label_rbase_unit = ttk.Label(baseframe,text = "(omm)")
         label_rbase_unit.grid(row = 2, column = 3, padx = 2)
         
-        label_tbase = ttk.Label(baseframe,text = "TOC基线(默认0)")
+        label_tbase = ttk.Label(baseframe,text = "TOC baseline(default 0)")
         label_tbase.grid(row = 3, column = 1, padx = 2)
         tbase = StringVar()
         tbase_entry = Entry(baseframe,textvariable = tbase)
@@ -529,7 +529,7 @@ class MainWindow:
         label_tbase_unit = ttk.Label(baseframe,text = "(%)")
         label_tbase_unit.grid(row = 3, column = 3, padx = 2)
 
-        label_lbase = ttk.Label(baseframe,text = "热变指数lom(默认15)")
+        label_lbase = ttk.Label(baseframe,text = "lom index(default 15)")
         label_lbase.grid(row = 4, column = 1, padx = 2)
         lbase = StringVar()
         lbase_entry = Entry(baseframe,textvariable = lbase)
@@ -540,7 +540,7 @@ class MainWindow:
          #选项卡三 预测按钮
         def buttonListener_logfit(event):
             if dlog_path.get() == "": #没有测井文件
-                tkinter.messagebox.showinfo("提示","请输入测井文件")
+                tkinter.messagebox.showinfo("NOTICE","Need LOG file")
             else:
                 logr_data = dlog_path.get()
                 filename_logr = tkinter.filedialog.asksaveasfilename(filetypes=(("Text","*.txt"),("All files","*.*")))
@@ -553,9 +553,9 @@ class MainWindow:
                         base_toc = 0
                         
                     final_ac,final_rt = logR(filename_logr+'.txt',logr_data, base_ac=abase.get(), base_rt=rbase.get(), k=0.02, lom=lom, base_toc=base_toc)
-                    tkinter.messagebox.showinfo("提示",("预测完成\nAC基线：%s;RT基线:%s"%(final_ac,final_rt)))
+                    tkinter.messagebox.showinfo("NOTICE",("Success!\nAC baseline：%s;RT baseline:%s"%(final_ac,final_rt)))
                             
-        button_logfit = ttk.Button(calframe,text = "预测")
+        button_logfit = ttk.Button(calframe,text = "predict")
         button_logfit.grid(row = 1,column = 1, padx = 4)  
         button_logfit.bind("<ButtonRelease-1>",buttonListener_logfit)
         
