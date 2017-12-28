@@ -31,7 +31,7 @@ class MainWindow:
     def  __init__(self):  
         self.frame = Tk()
 
-        self.frame.title("tight-oil TOC calculator")
+        self.frame.title("Tight-oil TOC calculator")
         self.frame.minsize(340,440)
         self.frame.maxsize(330,420)
 
